@@ -16,7 +16,7 @@ class DatosSemilla(private val db: JdbcTemplate,private val encoder: BCryptPassw
         require(clave.length>=8) { "SEED_PASSWORD debe configurarse fuera del repositorio" }
         db.execute("SELECT pg_advisory_xact_lock(20261027)")
         val nombres=listOf(Triple("operario1","Jorge Quispe — Operario","OPERARIO"),Triple("supervisor1","Supervisor de operaciones","SUPERVISOR"),Triple("admin","Administrador EcoRecicla","ADMINISTRADOR"))
-        nombres.forEach { (usuario,nombre,rol) -> db.update("INSERT INTO usuario(usuario,nombre,clave,rol_id) SELECT ?,?,?,id FROM rol WHERE nombre=? ON CONFLICT(usuario) DO NOTHING",usuario,nombre,encoder.encode(clave),rol) }
+        (nombres+Triple("auditor1","Auditor de EcoRecicla","AUDITOR")).forEach { (usuario,nombre,rol) -> db.update("INSERT INTO usuario(usuario,nombre,clave,rol_id) SELECT ?,?,?,id FROM rol WHERE nombre=? ON CONFLICT(usuario) DO NOTHING",usuario,nombre,encoder.encode(clave),rol) }
         if(db.queryForObject("SELECT count(*) FROM punto",Long::class.java)==0L) {
             val empresas=listOf("Mercado Las Flores","Colegio San Miguel","Comercial El Roble","Imprenta Horizonte","Bodega La Esperanza","Almacén Los Olivos","Restaurante El Valle","Centro Cultural Norte","Textiles Aurora","Distribuidora Andina","Hotel Los Jardines","Oficinas Río Verde")
             empresas.forEachIndexed { i,nombre -> db.update("INSERT INTO punto(razon_social,direccion,zona,material_habitual) VALUES (?,?,?,?)",nombre,"Av. Reciclaje ${100+i*25}",listOf("Norte","Centro","Sur")[i/4],listOf("Cartón","Plástico","Metal")[i%3]) }

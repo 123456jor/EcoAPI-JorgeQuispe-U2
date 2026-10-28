@@ -45,7 +45,7 @@ class EcoService(private val repo: EcoRepository,private val json: ObjectMapper)
     }
     @PreAuthorize("hasAuthority('PUNTO_LEER')")
     fun rutaDelDia(u: Identidad,fecha: LocalDate): Ruta {
-        val r=db.queryForList("SELECT r.* FROM ruta r JOIN ruta_usuario ru ON ru.ruta_id=r.id WHERE ru.usuario_id=? AND r.fecha=? ORDER BY r.id DESC LIMIT 1",u.id,fecha).firstOrNull() ?: throw ReglaException(404,"No hay ruta asignada para esta fecha")
+        val r=db.queryForList("SELECT r.* FROM ruta r WHERE (? OR EXISTS(SELECT 1 FROM ruta_usuario ru WHERE ru.ruta_id=r.id AND ru.usuario_id=?)) AND r.fecha=? ORDER BY r.id DESC LIMIT 1",u.tiene("LECTURA_GLOBAL"),u.id,fecha).firstOrNull() ?: throw ReglaException(404,"No hay ruta asignada para esta fecha")
         val id=(r["id"] as Number).toLong()
         return Ruta(id,r["fecha"].toString(),r["estado"] as String,repo.puntosRuta(id))
     }
@@ -60,7 +60,7 @@ class EcoService(private val repo: EcoRepository,private val json: ObjectMapper)
     fun pesajes(u: Identidad,punto: Long,p: Int,t: Int): Pagina<Pesaje> {
         pagina(p,t)
         if(!existe("SELECT count(*) FROM punto WHERE id=?",punto)) throw ReglaException(404,"Punto no encontrado")
-        val global=u.tiene("RUTA_CERRAR") || u.tiene("PUNTO_GESTIONAR")
+        val global=u.tiene("LECTURA_GLOBAL") || u.tiene("RUTA_CERRAR") || u.tiene("PUNTO_GESTIONAR")
         val filtro="p.punto_id=? AND (? OR EXISTS(SELECT 1 FROM ruta_usuario ru WHERE ru.ruta_id=p.ruta_id AND ru.usuario_id=?))"
         val total=db.queryForObject("SELECT count(*) FROM pesaje p WHERE $filtro",Long::class.java,punto,global,u.id)!!
         val rows=db.query("SELECT p.*,u.usuario FROM pesaje p JOIN usuario u ON u.id=p.usuario_id WHERE $filtro ORDER BY p.fecha_hora DESC,p.id DESC LIMIT ? OFFSET ?",{ r,_ -> repo.mapearPesaje(r) },punto,global,u.id,t,p.toLong()*t)
