@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/ecorecicla}
+    username: ${DATABASE_USER:ecorecicla}
+    password: ${DATABASE_PASSWORD}
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  flyway:
+    enabled: true
+server:
+  port: 8080
+  error:
+    include-message: never
+eco:
+  jwt-secret: ${JWT_SECRET}
+  seed-enabled: ${SEED_ENABLED:false}
+  seed-password: ${SEED_PASSWORD:}
+  zone: America/Lima
