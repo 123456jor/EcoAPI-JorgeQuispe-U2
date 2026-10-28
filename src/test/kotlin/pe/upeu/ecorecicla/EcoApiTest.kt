@@ -43,6 +43,21 @@ class EcoApiTest {
     }
     private fun payload(bruto: Int=30,tara: Int=2,solicitud: String=UUID.randomUUID().toString()) = mapOf("solicitudId" to solicitud,"rutaId" to ruta,"puntoId" to punto,"material" to "Cartón","pesoBruto" to bruto,"tara" to tara,"observacion" to "Prueba automatizada")
     private fun crear(token: String=operario,p: Map<String,Any> = payload()) = mvc.perform(post("/api/v1/pesajes").header("Authorization","Bearer $token").contentType(MediaType.APPLICATION_JSON).content(json.writeValueAsString(p))).andReturn().response
+    @Test fun `auditor lee sin asignacion y no puede escribir`() {
+        val token=login("auditor1")
+        for(path in listOf("/api/v1/usuarios/me","/api/v1/puntos","/api/v1/rutas/hoy","/api/v1/puntos/$punto/pesajes")) assertEquals(200,mvc.perform(get(path).header("Authorization","Bearer $token")).andReturn().response.status,path)
+        assertEquals(403,crear(token).status)
+        val id=json.readTree(crear().contentAsString)["id"].asLong()
+        val acciones=listOf(
+            put("/api/v1/pesajes/$id").content(json.writeValueAsString(payload())),
+            delete("/api/v1/pesajes/$id").param("motivo","Prueba"),
+            post("/api/v1/rutas/$ruta/cerrar"),
+            put("/api/v1/rutas/$ruta/puntos/$punto/omision").content("{\"motivo\":\"Prueba\"}"),
+            post("/api/v1/puntos").content("{\"razonSocial\":\"Prueba\",\"direccion\":\"Calle\",\"zona\":\"Norte\",\"materialHabitual\":\"Metal\"}"),
+            post("/api/v1/rutas").content(json.writeValueAsString(mapOf("fecha" to LocalDate.now().toString(),"usuarios" to listOf(1),"puntos" to listOf(punto))))
+        )
+        acciones.forEach { assertEquals(403,mvc.perform(it.header("Authorization","Bearer $token").contentType(MediaType.APPLICATION_JSON)).andReturn().response.status) }
+    }
     @Test fun `login rechaza credenciales y el token dura una hora`() {
         val r=mvc.perform(post("/api/v1/auth/login").contentType(MediaType.APPLICATION_JSON).content("{\"usuario\":\"operario1\",\"contrasena\":\"incorrecta\"}")).andReturn().response
         assertEquals(401,r.status)
