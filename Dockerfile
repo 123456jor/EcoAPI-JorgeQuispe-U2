@@ -1,7 +1,7 @@
 FROM eclipse-temurin:25-jdk AS build
 WORKDIR /workspace
 COPY . .
-RUN chmod +x gradlew && ./gradlew installDist --no-daemon
+RUN sed -i 's/\r$//' gradlew && chmod +x gradlew && ./gradlew installDist --no-daemon
 FROM eclipse-temurin:25-jre
 WORKDIR /app
 COPY --from=build /workspace/build/install/EcoAPI /app

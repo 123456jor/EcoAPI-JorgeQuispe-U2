@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableMethodSecurity
 class SecurityConfig {
+    @Bean fun registrarFiltro(filter: JwtAuthenticationFilter) = org.springframework.boot.web.servlet.FilterRegistrationBean(filter).apply { isEnabled=false }
     @Bean fun passwordEncoder() = BCryptPasswordEncoder(12)
     @Bean fun seguridad(http: HttpSecurity,filter: JwtAuthenticationFilter,mapper: ObjectMapper): SecurityFilterChain {
         http.csrf { it.disable() }.sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
