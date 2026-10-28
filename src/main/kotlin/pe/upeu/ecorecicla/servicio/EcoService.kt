@@ -71,7 +71,7 @@ class EcoService(private val repo: EcoRepository,private val json: ObjectMapper)
         val estado=bloquearRuta(p.rutaId); acceso(u,p.rutaId)
         val h=huella("CREAR",null,p); anterior(u,p,h)?.let { return it }
         abierta(estado); val neto=validar(p)
-        val id=db.queryForObject("INSERT INTO pesaje(ruta_id,punto_id,material,peso_bruto,tara,peso_neto,observacion,usuario_id) VALUES (?,?,?,?,?,?,?,?) RETURNING id",Long::class.java,p.rutaId,p.puntoId,p.material,p.pesoBruto,p.tara,neto,p.observacion,u.id)!!
+        val id=db.queryForObject("INSERT INTO pesaje(ruta_id,punto_id,material,peso_bruto,tara,peso_neto,observacion,usuario_id,humedad_estimada) VALUES (?,?,?,?,?,?,?,?,?) RETURNING id",Long::class.java,p.rutaId,p.puntoId,p.material,p.pesoBruto,p.tara,neto,p.observacion,u.id,p.humedadEstimada)!!
         val resultado=repo.pesaje(id); auditar(u,"CREAR",null,resultado); recordar(u,p,h,resultado); return resultado
     }
     @PreAuthorize("hasAuthority('PESAJE_EDITAR')")
@@ -84,7 +84,7 @@ class EcoService(private val repo: EcoRepository,private val json: ObjectMapper)
         if(!u.tiene("PESAJE_ANULAR") && (old.operario!=u.usuario || Instant.parse(old.fechaHora).atZone(zona).toLocalDate()!=LocalDate.now(zona))) throw ReglaException(403,"Solo puede corregir sus pesajes del mismo día")
         if(old.estado=="ANULADO") throw ReglaException(409,"No se puede corregir un pesaje anulado")
         val neto=validar(p)
-        db.update("UPDATE pesaje SET material=?,peso_bruto=?,tara=?,peso_neto=?,observacion=? WHERE id=?",p.material,p.pesoBruto,p.tara,neto,p.observacion,id)
+        db.update("UPDATE pesaje SET material=?,peso_bruto=?,tara=?,peso_neto=?,observacion=?,humedad_estimada=? WHERE id=?",p.material,p.pesoBruto,p.tara,neto,p.observacion,p.humedadEstimada,id)
         val result=repo.pesaje(id); auditar(u,"EDITAR",old,result); recordar(u,p,h,result); return result
     }
     @PreAuthorize("hasAuthority('PESAJE_ANULAR')")

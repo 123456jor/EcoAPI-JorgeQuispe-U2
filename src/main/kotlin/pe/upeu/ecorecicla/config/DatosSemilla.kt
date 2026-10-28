@@ -37,7 +37,7 @@ class DatosSemilla(private val db: JdbcTemplate,private val encoder: BCryptPassw
                 val punto=plan[i%plan.size]
                 val autor=if(i==1) supervisor else operario
                 val momento=(if(!cerrada && i==2) fecha.minusDays(1) else fecha).atTime(8+i%8,15).atZone(ZoneId.of("America/Lima")).toOffsetDateTime()
-                db.update("INSERT INTO pesaje(ruta_id,punto_id,fecha_hora,material,peso_bruto,tara,peso_neto,observacion,usuario_id,anulado,motivo_anulacion) VALUES (?,?,?,'Cartón',25,2,23,'Dato semilla del examen',?,?,?)",ruta,punto,momento,autor,cerrada && i==0,if(cerrada && i==0) "Error de digitación — semilla" else null)
+                db.update("INSERT INTO pesaje(ruta_id,punto_id,fecha_hora,material,peso_bruto,tara,peso_neto,observacion,usuario_id,anulado,motivo_anulacion,humedad_estimada) VALUES (?,?,?,'Cartón',25,2,23,'Dato semilla del examen',?,?,?,12.5)",ruta,punto,momento,autor,cerrada && i==0,if(cerrada && i==0) "Error de digitación — semilla" else null)
             }
         }
     }
