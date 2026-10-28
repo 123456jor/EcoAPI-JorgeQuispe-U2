@@ -1,0 +1,10 @@
+{
+  "name": "ecoapi-pruebas",
+  "private": true,
+  "scripts": {
+    "test:api": "node scripts/probar-postman.cjs"
+  },
+  "devDependencies": {
+    "newman": "6.2.3"
+  }
+}

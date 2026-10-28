@@ -1,0 +1,1566 @@
+{
+  "item": [
+    {
+      "id": "7ac88589-a870-4cd7-833e-d2c01f48e2e0",
+      "name": "Login operario1",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "auth",
+            "login"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"usuario\": \"operario1\", \"contrasena\": \"{{claveExamen}}\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "6003232c-5765-4fd7-82ea-580ba1eac827",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.collectionVariables.set(\"tokenOperario\",pm.response.json().token); pm.test(\"JWT y privilegios\",()=>{ const r=pm.response.json(); pm.expect(r.token.split(\".\")).to.have.length(3); pm.expect(r.privilegios).to.be.an(\"array\"); });"
+            ],
+            "_lastExecutionId": "74927017-ab0b-4acc-9810-275dd5e9298f"
+          }
+        }
+      ]
+    },
+    {
+      "id": "c44fd32c-f8fa-4437-911a-f0c05af3433c",
+      "name": "Login supervisor1",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "auth",
+            "login"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"usuario\": \"supervisor1\", \"contrasena\": \"{{claveExamen}}\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "9e752639-f69c-4f4f-8231-6547e93f8166",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.collectionVariables.set(\"tokenSupervisor\",pm.response.json().token); pm.test(\"JWT y privilegios\",()=>{ const r=pm.response.json(); pm.expect(r.token.split(\".\")).to.have.length(3); pm.expect(r.privilegios).to.be.an(\"array\"); });"
+            ],
+            "_lastExecutionId": "97eab565-7ec2-4c91-9169-d3cbed2bc8f2"
+          }
+        }
+      ]
+    },
+    {
+      "id": "8b8801a3-6154-4d42-a086-6537c5bc0078",
+      "name": "Login admin",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "auth",
+            "login"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"usuario\": \"admin\", \"contrasena\": \"{{claveExamen}}\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "bee3c938-cfd6-4eb3-abd9-6f9b1ac9ea91",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.collectionVariables.set(\"tokenAdmin\",pm.response.json().token); pm.test(\"JWT y privilegios\",()=>{ const r=pm.response.json(); pm.expect(r.token.split(\".\")).to.have.length(3); pm.expect(r.privilegios).to.be.an(\"array\"); });"
+            ],
+            "_lastExecutionId": "3de055b0-7324-405d-b610-88c02afb7f21"
+          }
+        }
+      ]
+    },
+    {
+      "id": "21c50700-57fd-439e-8967-92558c0a6899",
+      "name": "Credenciales incorrectas → 401",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "auth",
+            "login"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"usuario\": \"operario1\", \"contrasena\": \"incorrecta\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "4d0b1cd2-6ce6-4c5b-b76d-7aec7a012ac7",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 401\", () => pm.response.to.have.status(401));",
+              ""
+            ],
+            "_lastExecutionId": "5d27acc4-84ce-4adb-8d3a-4426f8b0c23a"
+          }
+        }
+      ]
+    },
+    {
+      "id": "6adaa2c5-4810-4b54-aa6b-e6577f62b508",
+      "name": "Token ausente → 401",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "usuarios",
+            "me"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "method": "GET"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "ea280355-cab2-47a7-8a9f-5d35247f8b8a",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 401\", () => pm.response.to.have.status(401));",
+              ""
+            ],
+            "_lastExecutionId": "5e485065-e48b-491d-ae42-bbd970ae3163"
+          }
+        }
+      ]
+    },
+    {
+      "id": "def3a2e3-1107-4f57-b379-6bc8301bab40",
+      "name": "Token alterado → 401",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "usuarios",
+            "me"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenAlterado}}"
+          }
+        ],
+        "method": "GET"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "92e9c1ad-7fe8-479a-bc12-e12d5cbd75b4",
+            "type": "text/javascript",
+            "exec": [
+              "const p=pm.collectionVariables.get(\"tokenOperario\").split(\".\"); p[2]=(p[2][0]===\"a\"?\"b\":\"a\")+p[2].slice(1); pm.collectionVariables.set(\"tokenAlterado\",p.join(\".\"));"
+            ],
+            "_lastExecutionId": "2690aebc-4c9e-4867-96d6-5c58b8f2da7d"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "241bb197-80d0-49b0-b858-ea2730dd3b7b",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 401\", () => pm.response.to.have.status(401));",
+              ""
+            ],
+            "_lastExecutionId": "a61e1d65-7ae8-4c33-afe7-3d2843b2c82a"
+          }
+        }
+      ]
+    },
+    {
+      "id": "83bf9f96-f0e8-4752-963b-4a4ce9e9a55f",
+      "name": "Token vencido con firma válida → 401",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "usuarios",
+            "me"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenVencido}}"
+          }
+        ],
+        "method": "GET"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "bc15d57d-6517-4f23-a8fc-5a3bf8c06bd7",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 401\",()=>pm.response.to.have.status(401));"
+            ],
+            "_lastExecutionId": "a8043b8f-35c1-4766-a30e-3c350688b020"
+          }
+        }
+      ]
+    },
+    {
+      "id": "7f991e9e-0003-4d85-8dec-630ce5ad2f72",
+      "name": "Usuario actual",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "usuarios",
+            "me"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenOperario}}"
+          }
+        ],
+        "method": "GET"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "9a7044cc-5509-4861-806c-665a28b1a2f3",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Usuario del token\",()=>pm.expect(pm.response.json().usuario).to.eql(\"operario1\"));",
+              "pm.collectionVariables.set(\"idOperario\",pm.response.json().id);"
+            ],
+            "_lastExecutionId": "ec9ab419-ecdd-444b-b93e-0cb17fee4a7b"
+          }
+        }
+      ]
+    },
+    {
+      "id": "3eeebe1b-cd96-4f28-bf25-e1f4e2fa9ca0",
+      "name": "Identificador real del supervisor",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "usuarios",
+            "me"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenSupervisor}}"
+          }
+        ],
+        "method": "GET"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "501e2ea6-1328-469d-9dc3-1e93a17953e5",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));pm.collectionVariables.set(\"idSupervisor\",pm.response.json().id);"
+            ],
+            "_lastExecutionId": "f3d14661-8ffc-4613-801d-475ef545589b"
+          }
+        }
+      ]
+    },
+    {
+      "id": "0a913b08-c792-41c2-9e63-dcc74ab5c2a1",
+      "name": "Ruta asignada del día",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "rutas",
+            "hoy"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenOperario}}"
+          }
+        ],
+        "method": "GET"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "cd5fd8a9-53c2-4fbb-a8ba-d1557449aeab",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const r=pm.response.json();pm.collectionVariables.set(\"rutaSemilla\",r.id);pm.collectionVariables.set(\"puntoSemilla\",r.puntos[2].id);pm.test(\"Puntos ordenados\",()=>pm.expect(r.puntos[0].secuencia).to.eql(1));"
+            ],
+            "_lastExecutionId": "ffb1eaf2-9039-468b-89c8-c0179cc379c3"
+          }
+        }
+      ]
+    },
+    {
+      "id": "9e0fde3e-ed33-43c0-90b3-429fe6623f65",
+      "name": "Paginación y zona Norte",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "puntos"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [
+            {
+              "key": "pagina",
+              "value": "0"
+            },
+            {
+              "key": "tamanio",
+              "value": "2"
+            },
+            {
+              "key": "zona",
+              "value": "Norte"
+            }
+          ],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenOperario}}"
+          }
+        ],
+        "method": "GET"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "abc11000-c5c8-4580-ad4f-8f39ce94b193",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const p=pm.response.json();pm.collectionVariables.set(\"punto1\",p.contenido[0].id);pm.collectionVariables.set(\"punto2\",p.contenido[1].id);pm.test(\"Envoltorio y filtro\",()=>{pm.expect(p.contenido).to.have.length(2);pm.expect(p.totalElementos).to.be.at.least(4);pm.expect(p.ultima).to.be.false;pm.expect(p.contenido.every(x=>x.zona===\"Norte\")).to.be.true;});"
+            ],
+            "_lastExecutionId": "7917c1c4-a97c-414d-b597-e4c43b965e79"
+          }
+        }
+      ]
+    },
+    {
+      "id": "c89b4cf0-718c-42ad-b2ee-ec995ad9edf1",
+      "name": "Pesajes de punto y fecha descendente",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "puntos",
+            "{{puntoSemilla}}",
+            "pesajes"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [
+            {
+              "key": "pagina",
+              "value": "0"
+            },
+            {
+              "key": "tamanio",
+              "value": "100"
+            }
+          ],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenOperario}}"
+          }
+        ],
+        "method": "GET"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "baf74084-fea5-4612-a0b7-c138db29cda9",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "const p=pm.response.json();const viejo=p.contenido.find(x=>x.operario===\"operario1\" && x.rutaId===Number(pm.collectionVariables.get(\"rutaSemilla\")));if(viejo) pm.collectionVariables.set(\"pesajeFueraPlazo\",viejo.id);pm.test(\"Paginación\",()=>pm.expect(p).to.have.property(\"totalPaginas\"));"
+            ],
+            "_lastExecutionId": "4c1a4739-56d9-406c-9f45-a1145ce3824f"
+          }
+        }
+      ]
+    },
+    {
+      "id": "1a516fe1-9f8b-4abd-9aff-ba52166b9f1b",
+      "name": "RN-02: corrección fuera del mismo día → 403",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "pesajes",
+            "{{pesajeFueraPlazo}}"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenOperario}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"solicitudId\": \"{{$guid}}\", \"rutaId\": \"{{rutaSemilla}}\", \"puntoId\": \"{{puntoSemilla}}\", \"material\": \"Cartón\", \"pesoBruto\": 30, \"tara\": 2, \"observacion\": \"Prueba RN-02\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "46a9f4d3-362c-4eb0-968c-6e419f2e7878",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 403\", () => pm.response.to.have.status(403));",
+              ""
+            ],
+            "_lastExecutionId": "a0383707-7c55-4e07-ad6a-bf7af12b87b2"
+          }
+        }
+      ]
+    },
+    {
+      "id": "58698ef5-56c0-45f6-acba-907a994df598",
+      "name": "Admin crea ruta aislada de pruebas",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "rutas"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenAdmin}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"fecha\": \"2099-01-01\", \"usuarios\": [\"{{idOperario}}\", \"{{idSupervisor}}\"], \"puntos\": [\"{{punto1}}\", \"{{punto2}}\"]}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "f0619f0a-978f-474c-93e4-51bd7a6b59aa",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set(\"rutaPrueba\",pm.response.json().id);"
+            ],
+            "_lastExecutionId": "c1eb5dcf-b0ed-449a-bbe2-8554e98a1d5a"
+          }
+        }
+      ]
+    },
+    {
+      "id": "0fe28f35-6e1c-4bed-9ae1-1da24b2fb6fc",
+      "name": "Supervisor crea pesaje ajeno",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "pesajes"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenSupervisor}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"solicitudId\": \"{{$guid}}\", \"rutaId\": \"{{rutaPrueba}}\", \"puntoId\": \"{{punto1}}\", \"material\": \"Cartón\", \"pesoBruto\": 30, \"tara\": 2, \"observacion\": \"Prueba Postman\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "bc0dead5-6d9d-42e7-9840-79ac8e57d20d",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set(\"pesajeAjeno\",pm.response.json().id);"
+            ],
+            "_lastExecutionId": "f45f1b4c-715e-4c95-ae7e-805190a02d9a"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fad03842-b6a7-4b9d-9d69-518716ecf6e7",
+      "name": "RN-02: operario corrige ajeno → 403",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "pesajes",
+            "{{pesajeAjeno}}"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenOperario}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"solicitudId\": \"{{$guid}}\", \"rutaId\": \"{{rutaPrueba}}\", \"puntoId\": \"{{punto1}}\", \"material\": \"Cartón\", \"pesoBruto\": 30, \"tara\": 2, \"observacion\": \"Prueba Postman\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "fde6e74f-9aef-44e4-bda2-320325905980",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 403\", () => pm.response.to.have.status(403));",
+              ""
+            ],
+            "_lastExecutionId": "86436ad6-6d62-43c8-922d-fa77fdafb224"
+          }
+        }
+      ]
+    },
+    {
+      "id": "4b100fd6-82c8-4cd1-ac9b-b459d4779b77",
+      "name": "Administrador crea pesaje → 403",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "pesajes"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenAdmin}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"solicitudId\": \"{{$guid}}\", \"rutaId\": \"{{rutaPrueba}}\", \"puntoId\": \"{{punto1}}\", \"material\": \"Cartón\", \"pesoBruto\": 30, \"tara\": 2, \"observacion\": \"Prueba Postman\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "6f3eee4e-faf3-46ee-9b85-50ad0e169358",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 403\", () => pm.response.to.have.status(403));",
+              ""
+            ],
+            "_lastExecutionId": "6c6b1212-61b1-4c53-b3b7-2393fe8904b5"
+          }
+        }
+      ]
+    },
+    {
+      "id": "e48a1eed-508f-4107-bc1a-182e76082b82",
+      "name": "RN-03: neto inválido → 400",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "pesajes"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenOperario}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"solicitudId\": \"{{$guid}}\", \"rutaId\": \"{{rutaPrueba}}\", \"puntoId\": \"{{punto1}}\", \"material\": \"Cartón\", \"pesoBruto\": 2, \"tara\": 3, \"observacion\": \"Prueba Postman\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "344a3d80-428c-4b60-afb5-4d6aacbbf1a7",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"Error por campo\",()=>pm.expect(pm.response.json().validationErrors).to.have.property(\"pesoBruto\"));"
+            ],
+            "_lastExecutionId": "8373884c-24ea-402c-bec6-5b678cf695c9"
+          }
+        }
+      ]
+    },
+    {
+      "id": "c0d702f0-0422-4140-9aa5-ca3c37491384",
+      "name": "Operario crea pesaje",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "pesajes"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenOperario}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"solicitudId\": \"{{solicitudCreacion}}\", \"rutaId\": \"{{rutaPrueba}}\", \"puntoId\": \"{{punto1}}\", \"material\": \"Cartón\", \"pesoBruto\": 30, \"tara\": 2, \"observacion\": \"Prueba Postman\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "62c266d2-3887-43c6-94ae-de17f0a35c42",
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set(\"solicitudCreacion\",pm.variables.replaceIn(\"{{$guid}}\"));"
+            ],
+            "_lastExecutionId": "6a814499-9e72-4aa0-80aa-ac99d9dfdf3e"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "85d42f2f-b70a-4cc3-970d-8b66768083c9",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set(\"pesajeCreado\",pm.response.json().id);pm.test(\"Neto calculado\",()=>pm.expect(pm.response.json().pesoNeto).to.eql(28));"
+            ],
+            "_lastExecutionId": "cecd6563-a848-461c-85bc-24a704a2928e"
+          }
+        }
+      ]
+    },
+    {
+      "id": "990befad-f868-46b8-b9ad-4ba44ce53d92",
+      "name": "Reintento idempotente devuelve mismo ID",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "pesajes"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenOperario}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"solicitudId\": \"{{solicitudCreacion}}\", \"rutaId\": \"{{rutaPrueba}}\", \"puntoId\": \"{{punto1}}\", \"material\": \"Cartón\", \"pesoBruto\": 30, \"tara\": 2, \"observacion\": \"Prueba Postman\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "509bfcc2-98da-4e20-a178-607a0a237716",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+              "pm.test(\"Sin duplicación\",()=>pm.expect(pm.response.json().id).to.eql(Number(pm.collectionVariables.get(\"pesajeCreado\"))));"
+            ],
+            "_lastExecutionId": "93c5a140-2556-48cc-bfa9-8174796253cc"
+          }
+        }
+      ]
+    },
+    {
+      "id": "0e486ff2-f863-464e-abb8-1a5ef71cf31f",
+      "name": "Reutilizar solicitud con otros datos → 409",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "pesajes"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenOperario}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"solicitudId\": \"{{solicitudCreacion}}\", \"rutaId\": \"{{rutaPrueba}}\", \"puntoId\": \"{{punto1}}\", \"material\": \"Cartón\", \"pesoBruto\": 40, \"tara\": 2, \"observacion\": \"Prueba Postman\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "2c8a9d92-9a42-4273-8b8c-043243588a5a",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 409\", () => pm.response.to.have.status(409));",
+              ""
+            ],
+            "_lastExecutionId": "7bf469c1-913d-43d6-833a-077297249947"
+          }
+        }
+      ]
+    },
+    {
+      "id": "8dcf2986-fc45-4cc4-bf62-e607006afbe8",
+      "name": "Operario corrige pesaje propio",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "pesajes",
+            "{{pesajeCreado}}"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenOperario}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"solicitudId\": \"{{$guid}}\", \"rutaId\": \"{{rutaPrueba}}\", \"puntoId\": \"{{punto1}}\", \"material\": \"Cartón\", \"pesoBruto\": 35, \"tara\": 2, \"observacion\": \"Prueba Postman\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "d3c812ba-6484-45d4-a9cc-b63db52b46d7",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Neto corregido\",()=>pm.expect(pm.response.json().pesoNeto).to.eql(33));"
+            ],
+            "_lastExecutionId": "9f565ad5-ecd5-4349-8677-acb14fd885e2"
+          }
+        }
+      ]
+    },
+    {
+      "id": "6603235a-dde6-4bf3-9a1c-730c6fa13288",
+      "name": "Operario intenta anular → 403",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "pesajes",
+            "{{pesajeCreado}}"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [
+            {
+              "key": "motivo",
+              "value": "Prueba"
+            }
+          ],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenOperario}}"
+          }
+        ],
+        "method": "DELETE"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "0de3dc4e-7421-4725-baa0-86cd0566f41f",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 403\", () => pm.response.to.have.status(403));",
+              ""
+            ],
+            "_lastExecutionId": "edd3cd15-b09e-4b9e-bd44-4a595e79ec6c"
+          }
+        }
+      ]
+    },
+    {
+      "id": "93537dcc-d5b1-4af6-93c6-0917df3f1112",
+      "name": "Cierre de ruta incompleta → 409",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "rutas",
+            "{{rutaPrueba}}",
+            "cerrar"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenSupervisor}}"
+          }
+        ],
+        "method": "POST"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "b4994d85-b062-4e96-92d8-6b97d6245e6b",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 409\", () => pm.response.to.have.status(409));",
+              "pm.test(\"Motivo de conflicto\",()=>pm.expect(pm.response.json().message).to.include(\"1 puntos\"));"
+            ],
+            "_lastExecutionId": "362150f6-95e5-4d2a-87e4-471a09a11fcc"
+          }
+        }
+      ]
+    },
+    {
+      "id": "526edcbd-d257-46ea-901c-d10833f92a7c",
+      "name": "Supervisor anula lógicamente → 204",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "pesajes",
+            "{{pesajeCreado}}"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [
+            {
+              "key": "motivo",
+              "value": "Correccion%20de%20duplicado"
+            }
+          ],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenSupervisor}}"
+          }
+        ],
+        "method": "DELETE"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "1a35e54e-6c69-4e80-aeff-03e9bfab9769",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\", () => pm.response.to.have.status(204));",
+              ""
+            ],
+            "_lastExecutionId": "dc7200cc-723b-4976-b279-504eaa2dbbbb"
+          }
+        }
+      ]
+    },
+    {
+      "id": "1a44feb9-c5dc-4fe9-9323-869af6c0ffbb",
+      "name": "Registrar motivo de omisión",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "rutas",
+            "{{rutaPrueba}}",
+            "puntos",
+            "{{punto2}}",
+            "omision"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenOperario}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"motivo\": \"Empresa cerrada en prueba Postman\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "16339fe3-c776-4260-a48c-aa85f8be07c2",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\", () => pm.response.to.have.status(204));",
+              ""
+            ],
+            "_lastExecutionId": "3d955efd-725e-4b33-a3ee-b9a0062eb312"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ddafcffb-6616-4d9c-89a0-8761d9d3aced",
+      "name": "Supervisor cierra ruta completa",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "rutas",
+            "{{rutaPrueba}}",
+            "cerrar"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenSupervisor}}"
+          }
+        ],
+        "method": "POST"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "9566ebfc-dca7-40c0-9288-d7f059ba28e0",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\", () => pm.response.to.have.status(204));",
+              ""
+            ],
+            "_lastExecutionId": "ea91fe57-4145-4731-8470-b1ae87c82537"
+          }
+        }
+      ]
+    },
+    {
+      "id": "2a0c9988-b8ef-4e59-bd2a-659ed9f41a86",
+      "name": "RN-01: crear en ruta cerrada → 409",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "pesajes"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenOperario}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"solicitudId\": \"{{$guid}}\", \"rutaId\": \"{{rutaPrueba}}\", \"puntoId\": \"{{punto1}}\", \"material\": \"Cartón\", \"pesoBruto\": 30, \"tara\": 2, \"observacion\": \"Prueba Postman\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "6b8f271d-3823-4d24-aff3-624528cddd42",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 409\", () => pm.response.to.have.status(409));",
+              ""
+            ],
+            "_lastExecutionId": "f8dd5bc7-f4b2-4f92-ae4a-609aa46c4b44"
+          }
+        }
+      ]
+    },
+    {
+      "id": "a3468c5b-8e7b-46f4-9bc7-fadeac753f26",
+      "name": "RN-01: corregir en ruta cerrada → 409",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "pesajes",
+            "{{pesajeAjeno}}"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenSupervisor}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "method": "PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"solicitudId\": \"{{$guid}}\", \"rutaId\": \"{{rutaPrueba}}\", \"puntoId\": \"{{punto1}}\", \"material\": \"Cartón\", \"pesoBruto\": 30, \"tara\": 2, \"observacion\": \"Prueba Postman\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "6ed73ce3-4b5d-424b-a05c-978270bb85dd",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 409\", () => pm.response.to.have.status(409));",
+              ""
+            ],
+            "_lastExecutionId": "3d2f4488-e68b-46d9-8118-87b4a4b03b76"
+          }
+        }
+      ]
+    },
+    {
+      "id": "a0a79262-1b62-42ad-9fab-d0720acff289",
+      "name": "Recurso inexistente → 404",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "puntos",
+            "99999999",
+            "pesajes"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenOperario}}"
+          }
+        ],
+        "method": "GET"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "cba83f16-297f-45cb-abdb-ea78885cdf6e",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));",
+              ""
+            ],
+            "_lastExecutionId": "d0dd5433-ffe5-41ef-b877-9968ef1f98cb"
+          }
+        }
+      ]
+    },
+    {
+      "id": "a152f472-f41d-4000-8d1e-ce1fedd68b86",
+      "name": "Paginación inválida → 400",
+      "request": {
+        "url": {
+          "path": [
+            "api",
+            "v1",
+            "puntos"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [
+            {
+              "key": "pagina",
+              "value": "-1"
+            }
+          ],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenOperario}}"
+          }
+        ],
+        "method": "GET"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "baefd33d-9ab5-4346-bb56-05a4df545d3c",
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));",
+              ""
+            ],
+            "_lastExecutionId": "f4dcf3b5-8f7a-4633-97a8-7d8c675245bb"
+          }
+        }
+      ]
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "any",
+      "value": "http://localhost:8080",
+      "key": "baseUrl"
+    },
+    {
+      "type": "any",
+      "value": "",
+      "key": "claveExamen"
+    },
+    {
+      "type": "any",
+      "value": "",
+      "key": "tokenOperario"
+    },
+    {
+      "type": "any",
+      "value": "",
+      "key": "tokenSupervisor"
+    },
+    {
+      "type": "any",
+      "value": "",
+      "key": "tokenAdmin"
+    }
+  ],
+  "info": {
+    "_postman_id": "cd92a2e4-b254-4915-ab25-40f1d9666bfe",
+    "name": "EcoAPI — Jorge Quispe — Unidad 2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Colección reproducible. Ejecutar en orden. Crea su propia ruta de pruebas con fecha 2099-01-01, sin cerrar la ruta de demostración actual. Los tokens se guardan en variables locales durante la ejecución. La expiración con firma válida se comprueba además en EcoApiTest.",
+      "type": "text/plain"
+    }
+  }
+}

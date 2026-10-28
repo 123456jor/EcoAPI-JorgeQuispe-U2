@@ -14,7 +14,7 @@ class AuthService(private val usuarios: UsuarioRepository, private val encoder: 
         val coincide=encoder.matches(p.contrasena,u?.clave ?: dummy)
         if(u==null || !coincide) throw BadCredentialsException("Credenciales incorrectas")
         val token=jwt.emitir(u)
-        return SesionDto(token.tokenValue,u.usuario,u.nombre,u.rol.nombre,u.rol.privilegios,token.expiresAt.toString())
+        return SesionDto(token.tokenValue,u.usuario,u.nombre,u.rol.nombre,u.rol.privilegios,requireNotNull(token.expiresAt).toString())
     }
     fun actual(id: Long): UsuarioDto {
         val u=usuarios.porId(id) ?: throw ReglaException(401,"Sesión inválida")

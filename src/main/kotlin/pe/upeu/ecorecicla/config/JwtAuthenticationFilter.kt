@@ -24,7 +24,8 @@ class JwtAuthenticationFilter(private val jwt: JwtService, private val usuarios:
             val principal=Identidad(user.id,user.usuario,permisos)
             SecurityContextHolder.getContext().authentication=UsernamePasswordAuthenticationToken(principal,null,permisos.map(::SimpleGrantedAuthority))
         } catch(e: JwtException) { escribirError(response,mapper,401,"Token inválido o vencido",request.requestURI); return
-        } catch(e: IllegalArgumentException) { escribirError(response,mapper,401,"Token inválido",request.requestURI); return }
+        } catch(e: IllegalArgumentException) { escribirError(response,mapper,401,"Token inválido",request.requestURI); return
+        } catch(e: Exception) { escribirError(response,mapper,500,"No se pudo comprobar la sesión. Intente nuevamente.",request.requestURI); return }
         chain.doFilter(request,response)
     }
 }
