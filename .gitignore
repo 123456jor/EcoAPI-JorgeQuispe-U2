@@ -1,0 +1,12 @@
+.gradle/
+.gradle-user-home/
+build/
+**/build/
+local.properties
+.env
+*.jks
+*.keystore
+.idea/
+*.iml
+.DS_Store
+evidencias/privado/
