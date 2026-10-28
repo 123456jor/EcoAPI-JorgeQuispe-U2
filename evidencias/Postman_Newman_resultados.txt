@@ -1,0 +1,36 @@
+EcoAPI — Jorge Quispe — Ejecución real con Newman
+2026-10-28T20:25:02.905Z
+Comando: node scripts/probar-postman.cjs
+Login operario1: 200
+Login supervisor1: 200
+Login admin: 200
+Credenciales incorrectas → 401: 401
+Token ausente → 401: 401
+Token alterado → 401: 401
+Token vencido con firma válida → 401: 401
+Usuario actual: 200
+Identificador real del supervisor: 200
+Ruta asignada del día: 200
+Paginación y zona Norte: 200
+Pesajes de punto y fecha descendente: 200
+RN-02: corrección fuera del mismo día → 403: 403
+Admin crea ruta aislada de pruebas: 201
+Supervisor crea pesaje ajeno: 201
+RN-02: operario corrige ajeno → 403: 403
+Administrador crea pesaje → 403: 403
+RN-03: neto inválido → 400: 400
+Operario crea pesaje: 201
+Reintento idempotente devuelve mismo ID: 201
+Reutilizar solicitud con otros datos → 409: 409
+Operario corrige pesaje propio: 200
+Operario intenta anular → 403: 403
+Cierre de ruta incompleta → 409: 409
+Supervisor anula lógicamente → 204: 204
+Registrar motivo de omisión: 204
+Supervisor cierra ruta completa: 204
+RN-01: crear en ruta cerrada → 409: 409
+RN-01: corregir en ruta cerrada → 409: 409
+Recurso inexistente → 404: 404
+Paginación inválida → 400: 400
+Solicitudes: 31; fallos: 0
+Aserciones: 43; fallos: 0
