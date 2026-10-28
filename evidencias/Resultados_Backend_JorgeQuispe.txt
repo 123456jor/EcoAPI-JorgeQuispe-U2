@@ -1,0 +1,18 @@
+Jorge Quispe — resultados reales
+Comando: ./gradlew.bat test
+Ejecutadas: 10
+Fallidas: 0
+Errores: 0
+BUILD SUCCESSFUL
+Reporte: build/test-results/test/TEST-pe.upeu.ecorecicla.EcoApiTest.xml
+
+ausente alterado y vencido dan 401()
+RN01 rechaza alta y correccion en ruta cerrada()
+paginacion filtro y recurso inexistente respetan contrato()
+matriz de permisos se impone en el servicio()
+login rechaza credenciales y el token dura una hora()
+RN03 valida campos y calcula neto exclusivamente en servidor()
+RN04 cuenta puntos faltantes y acepta omisiones persistentes()
+rutas de otro usuario no se exponen()
+RN02 solo permite correccion propia del dia()
+idempotencia evita duplicar y rechaza reutilizar la clave con otros datos()

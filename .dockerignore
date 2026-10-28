@@ -1,0 +1,7 @@
+.git
+.gradle
+.gradle-user-home
+build
+.env
+evidencias
+node_modules
