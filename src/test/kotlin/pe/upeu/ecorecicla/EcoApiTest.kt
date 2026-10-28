@@ -58,6 +58,15 @@ class EcoApiTest {
         )
         acciones.forEach { assertEquals(403,mvc.perform(it.header("Authorization","Bearer $token").contentType(MediaType.APPLICATION_JSON)).andReturn().response.status) }
     }
+    @Test fun `humedad valida porcentaje y persiste alta y correccion`() {
+        for(valor in listOf(-1,101,12.555)) assertEquals(400,crear(p=payload()+mapOf("humedadEstimada" to valor)).status)
+        val r=crear(p=payload()+mapOf("humedadEstimada" to 12.5));assertEquals(201,r.status,r.contentAsString)
+        val id=json.readTree(r.contentAsString)["id"].asLong()
+        assertEquals(12.5,json.readTree(r.contentAsString)["humedadEstimada"].asDouble())
+        val edit=mvc.perform(put("/api/v1/pesajes/$id").header("Authorization","Bearer $operario").contentType(MediaType.APPLICATION_JSON).content(json.writeValueAsString(payload()+mapOf("humedadEstimada" to 20)))).andReturn().response
+        assertEquals(200,edit.status,edit.contentAsString)
+        assertEquals(20.0,db.queryForObject("SELECT humedad_estimada FROM pesaje WHERE id=?",Double::class.java,id))
+    }
     @Test fun `login rechaza credenciales y el token dura una hora`() {
         val r=mvc.perform(post("/api/v1/auth/login").contentType(MediaType.APPLICATION_JSON).content("{\"usuario\":\"operario1\",\"contrasena\":\"incorrecta\"}")).andReturn().response
         assertEquals(401,r.status)
